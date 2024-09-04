@@ -4,6 +4,7 @@ namespace Product.Controllers
 {
     public class ProductController : Controller
     {
+
         public IActionResult Index()
         {
             return View();
