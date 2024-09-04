@@ -6,7 +6,11 @@ namespace Product.Controllers
 {
     public class ProductController : Controller
     {
-
+        private readonly ProductDbContext _db;
+        public ProductController(ProductDbContext db)
+        {
+            _db = db;
+        }
         public IActionResult Index()
         {
             return View();
@@ -23,10 +27,12 @@ namespace Product.Controllers
                     Value = s,
                     Text = s.ToString()
                 }), "Value", "Text"),
-
+                ComplexityList = _db.complexity.Select(c => new SelectListItem
+                {
+                    Value = c.CId.ToString(),
+                    Text = c.Complexity
+                }).ToList()
             };
-
-           
             return View();
         }
     }
