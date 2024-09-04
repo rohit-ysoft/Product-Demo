@@ -21,19 +21,21 @@ namespace Product.Controllers
         {
             var model = new ProductVM
             {
-                status = Status.New, // Default value, if any
-                StatusList = new SelectList(Enum.GetValues(typeof(Status)).Cast<Status>().Select(s => new
+                // Create the StatusList from the enum
+                StatusList = _db.status.Select(c => new SelectListItem
                 {
-                    Value = s,
-                    Text = s.ToString()
-                }), "Value", "Text"),
+                    Value = c.SId.ToString(),
+                    Text = c.status
+                }).ToList(),
+                // Create the ComplexityList from the fetched data
                 ComplexityList = _db.complexity.Select(c => new SelectListItem
                 {
                     Value = c.CId.ToString(),
                     Text = c.Complexity
                 }).ToList()
             };
-            return View();
+
+            return View(model);
         }
     }
 }

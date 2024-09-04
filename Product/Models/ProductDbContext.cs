@@ -7,5 +7,6 @@ namespace Product.Models
         public ProductDbContext(DbContextOptions<ProductDbContext>options):base (options) { }
         public DbSet<ProductVM> product { get; set; }
         public DbSet<Estimated_Complexity> complexity { get; set; }
+        public DbSet<Status> status { get; set; }
     }
 }

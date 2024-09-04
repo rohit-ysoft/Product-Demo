@@ -13,17 +13,11 @@ namespace Product.Models
         public string Description { get; set; }
         public int CId { get; set; }
         public Estimated_Complexity Complexity { get; set; }
-        public IEnumerable<SelectListItem> ComplexityList { get; set; }
+        public List<SelectListItem> ComplexityList { get; set; }
+        public int SId { get; set; }
         public Status status { get; set; }
-        public IEnumerable<SelectListItem> StatusList { get; set; }
+        public List<SelectListItem> StatusList { get; set; }
         public DateTime TargateComplactionDate { get; set; }
         public DateTime ActualComplactionDate { get; set; }
-    }
-    public enum Status
-    {
-        New = 0,
-        Active = 1,
-        Closed = 2,
-        Abandoned = 3,
     }
 }
