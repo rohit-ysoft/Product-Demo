@@ -22,28 +22,22 @@ namespace Product.ViewModel
         public Status Status { get; set; }
 
         public IEnumerable<SelectListItem> StatusList { get; set; }
-
+        [DataType(DataType.Date)]
         [Display(Name = "Target Completion Date")]
-        [FutureDate(ErrorMessage = "The target completion date must be in the future.")]
+        [FutureDate(ErrorMessage = "Date should be in the future.")]
         public DateTime TargetComplactionDate { get; set; }
 
+        [DataType(DataType.Date)]
         [Display(Name = "Actual Completion Date")]
-        [FutureDate(ErrorMessage = "The actual completion date must be in the future.")]
+        [FutureDate(ErrorMessage = "Date should be in the future.")]
         public DateTime ActualComplactionDate { get; set; }
     }
 
     public class FutureDateAttribute : ValidationAttribute
     {
-        protected override ValidationResult IsValid(object value, ValidationContext validationContext)
+        public override bool IsValid(object value)
         {
-            if (value is DateTime dateValue)
-            {
-                if (dateValue <= DateTime.Now)
-                {
-                    return new ValidationResult("The date must be in the future.");
-                }
-            }
-            return ValidationResult.Success;
+            return value != null && (DateTime)value > DateTime.Now;
         }
     }
 }
