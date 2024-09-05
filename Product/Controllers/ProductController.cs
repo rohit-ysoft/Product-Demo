@@ -8,6 +8,7 @@ namespace Product.Controllers
     public class ProductController : Controller
     {
         private readonly productDbContext _context;
+        private const int PageSize = 10;
 
         public ProductController(productDbContext context)
         {
@@ -15,17 +16,39 @@ namespace Product.Controllers
         }
 
         // Index action to display the list of products
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string searchQuery, int page = 1)
         {
-            var products = await _context.Products.ToListAsync();
-            var viewModel = new productViewModel
+
+            IQueryable<productModel> query = _context.Products;
+
+            if (!string.IsNullOrEmpty(searchQuery))
+            {
+                query = query.Where(p => p.Title.Contains(searchQuery));
+
+            }
+
+
+            var totalCount = await _context.Products.CountAsync();
+
+
+            var products = await query
+           .OrderBy(p => p.ID)
+           .OrderBy(p => p.ID)
+      .Skip((page - 1) * PageSize)
+      .Take(PageSize)
+        .ToListAsync();
+
+
+            var model = new productViewModel
             {
                 Products = products,
+                CurrentPage = page,
+                TotalPages = (int)System.Math.Ceiling((double)totalCount / PageSize),
+                SearchQuery = searchQuery,
                 ComplexityList = GetSelectListItems<Complexity>(),
                 StatusList = GetSelectListItems<Status>()
             };
-
-            return View(viewModel);
+            return View(model);
         }
 
         [HttpPost]
