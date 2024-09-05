@@ -1,4 +1,4 @@
-﻿@model Product.ViewModel.productViewModel
+﻿@model Product.ViewModel.viewModel
 @{
     ViewData["Title"] = "Products";
 }
@@ -20,7 +20,7 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var product in Model)
+            @foreach (var product in Model.Products)
             {
                 <tr>
                     <td>@product.ID</td>
@@ -51,39 +51,39 @@
             </div>
             <form asp-action="Create" method="post" novalidate>
                 <div class="form-group">
-                    <label asp-for="Title"></label>
-                    <input asp-for="Title" class="form-control" />
-                    <span asp-validation-for="Title" class="text-danger"></span>
+                    <label asp-for="Product.Title"></label>
+                    <input asp-for="Product.Title" class="form-control" />
+                    <span asp-validation-for="Product.Title" class="text-danger"></span>
                 </div>
 
                 <div class="form-group">
-                    <label asp-for="Description"></label>
-                    <textarea asp-for="Description" class="form-control"></textarea>
-                    <span asp-validation-for="Description" class="text-danger"></span>
+                    <label asp-for="Product.Description"></label>
+                    <textarea asp-for="Product.Description" class="form-control"></textarea>
+                    <span asp-validation-for="Product.Description" class="text-danger"></span>
                 </div>
 
                 <div class="form-group">
-                    <label asp-for="Complexity"></label>
-                    <select asp-for="Complexity" class="form-control" asp-items="Model.ComplexityList"></select>
-                    <span asp-validation-for="Complexity" class="text-danger"></span>
+                    <label asp-for="Product.Complexity"></label>
+                    <select asp-for="Product.Complexity" class="form-control" asp-items="Model.Product.ComplexityList"></select>
+                    <span asp-validation-for="Product.Complexity" class="text-danger"></span>
                 </div>
 
                 <div class="form-group">
-                    <label asp-for="Status"></label>
-                    <select asp-for="Status" class="form-control" asp-items="Model.StatusList"></select>
-                    <span asp-validation-for="Status" class="text-danger"></span>
+                    <label asp-for="Product.Status"></label>
+                    <select asp-for="Product.Status" class="form-control" asp-items="Model.Product.StatusList"></select>
+                    <span asp-validation-for="Product.Status" class="text-danger"></span>
                 </div>
 
                 <div class="form-group">
-                    <label asp-for="TargetComplactionDate"></label>
-                    <input type="date" id="TargetCompletionDate" asp-for="TargetComplactionDate" class="form-control" min="@DateTime.Now.ToString("dd-MM-yyyy")" />
-                    <span asp-validation-for="TargetComplactionDate" class="text-danger"></span>
+                    <label asp-for="Product.TargetComplactionDate"></label>
+                    <input type="date" id="TargetCompletionDate" asp-for="Product.TargetComplactionDate" class="form-control" min="@DateTime.Now.ToString("dd-MM-yyyy")" />
+                    <span asp-validation-for="Product.TargetComplactionDate" class="text-danger"></span>
                 </div>
 
                 <div class="form-group">
-                    <label asp-for="ActualComplactionDate"></label>
-                    <input type="date" id="ActualComplactionDate" asp-for="ActualComplactionDate" class="form-control" min="@DateTime.Now.ToString("dd-MM-yyyy")" />
-                    <span asp-validation-for="ActualComplactionDate" class="text-danger"></span>
+                    <label asp-for="Product.ActualComplactionDate"></label>
+                    <input type="date" id="ActualComplactionDate" asp-for="Product.ActualComplactionDate" class="form-control" min="@DateTime.Now.ToString("dd-MM-yyyy")" />
+                    <span asp-validation-for="Product.ActualComplactionDate" class="text-danger"></span>
                 </div>
 
                 <button type="submit" class="btn btn-primary">Submit</button>
