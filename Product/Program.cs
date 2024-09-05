@@ -10,6 +10,8 @@ builder.Services.AddDbContext<ProductDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefConn"));
 });
 
+
+builder.Services.AddScoped<ProductDbContext>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

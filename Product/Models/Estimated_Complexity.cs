@@ -6,6 +6,7 @@ namespace Product.Models
     {
         [Key]
         public int CId { get; set; }
-        public string? Complexity { get; set; }
+        public string? Complexity { get; set; }    
+
     }
 }
