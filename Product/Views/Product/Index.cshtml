@@ -23,10 +23,9 @@
     <table class="table align-items-center">
         <thead>
             <tr>
-                <th>Id</th>
                 <th>
                     <a href="@Url.Action("Index", new { searchQuery = Model.SearchQuery, page = Model.CurrentPage, sortOrder = Model.SortOrder == "asc" ? "desc" : "asc" })">
-                        Title @if (Model.SortOrder == "asc")
+                        Id @if (Model.SortOrder == "asc")
                         {
                             <i class="fa fa-sort-asc"></i>
                         }
@@ -36,6 +35,7 @@
                         }
                     </a>
                 </th>
+               <th>Title</th>
                 <th>Estimated Complexity</th>
                 <th>Status</th>
                 <th>Target Completion Date</th>
@@ -271,12 +271,14 @@
 
             if (statusSelect1.value === '1' || statusSelect1.value === '3' || statusSelect1.value === '4') {
                 var isActive = true;
+                targetCompletionDateInput.value = '';
             }
 
             else { isActive = false }
 
             if (statusSelect1.value === '1' || statusSelect1.value === '2' || statusSelect1.value === '4') {
                 var Actual = true;
+                targetActualDateInput.value = '';
             }
 
             else { Actual = false }
@@ -302,12 +304,14 @@
             
             if (statusSelect.value === '1' || statusSelect.value === '3' || statusSelect.value === '4') {
                 var isActive = true;
+                targetCompletionDateInput.value = '';
             }
 
             else { isActive = false }
 
             if (statusSelect.value === '1' || statusSelect.value === '2' || statusSelect.value === '4') {
                 var Actual = true;
+                targetActualDateInput.value = '';
             }
 
             else { Actual = false }

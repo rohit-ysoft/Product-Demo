@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using Product.Helper;
 using System.ComponentModel.DataAnnotations;
 
 namespace Product.Models
@@ -16,12 +17,13 @@ namespace Product.Models
      
         [DataType(DataType.Date)]
         [Display(Name = "Target Completion Date")]
-        [FutureDate(ErrorMessage = "Date should be in the future.")]
+        [ConditionalRequired("Status", Status.Active, ErrorMessage = "Date should be in the future.")]
         public DateTime TargetCompletionDate { get; set; }
 
         [DataType(DataType.Date)]
         [Display(Name = "Actual Completion Date")]
-        [FutureDate(ErrorMessage = "Date should be in the future.")]
+        
+        [ConditionalRequired("Status", Status.Closed, ErrorMessage = "Date should be in the future.")]
         public DateTime ActualCompletionDate { get; set; }
     }
     public enum Complexity

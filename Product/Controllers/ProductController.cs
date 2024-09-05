@@ -17,7 +17,7 @@ namespace Product.Controllers
         }
 
         // Index action to display the list of products
-        public async Task<IActionResult> Index(string searchQuery, int page = 1, string sortOrder = "asc")
+        public async Task<IActionResult> Index(string searchQuery, int page = 1, string sortOrder = "desc")
         { 
             
             IQueryable<productModel> query = _context.Products;
@@ -29,11 +29,11 @@ namespace Product.Controllers
             switch (sortOrder.ToLower())
             {
                 case "desc":
-                    query = query.OrderByDescending(p => p.Title);
+                    query = query.OrderByDescending(p => p.ID);
                     break;
                 case "asc":
                 default:
-                    query = query.OrderBy(p => p.Title);
+                    query = query.OrderBy(p => p.ID);
                     break;
             }
             var totalCount = await _context.Products.CountAsync();
@@ -58,6 +58,7 @@ namespace Product.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(productModel product)
         {
+            
             if (ModelState.IsValid)
             {
                 try
@@ -91,7 +92,7 @@ namespace Product.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(productModel product, Complexity complexity)
         {
-
+            
             if (ModelState.IsValid)
             {
                 _context.Add(product);
