@@ -2,11 +2,9 @@
 
 namespace Product.Models
 {
-    public class ProductDbContext:DbContext
+    public class productDbContext:DbContext
     {
-        public ProductDbContext(DbContextOptions<ProductDbContext>options):base (options) { }
-        public DbSet<ProductVM> product { get; set; }
-        public DbSet<Estimated_Complexity> complexity { get; set; }
-        public DbSet<Status> status { get; set; }
+        public productDbContext(DbContextOptions<productDbContext>options):base(options) { }
+        public DbSet<productModel> Products { get; set; }
     }
 }
