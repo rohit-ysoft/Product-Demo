@@ -64,6 +64,7 @@ namespace Product.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(productModel product)
         {
+
             if (ModelState.IsValid)
             {
                 _context.Add(product);

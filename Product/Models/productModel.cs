@@ -13,7 +13,7 @@ namespace Product.Models
         public string Description { get; set; }
         public int Complexity { get; set; }
         public int Status { get; set; }
-        public IEnumerable<SelectListItem> StatusList { get; set; }
+     
         [DataType(DataType.Date)]
         [Display(Name = "Target Completion Date")]
         [FutureDate(ErrorMessage = "Date should be in the future.")]
