@@ -106,7 +106,7 @@
 
                     <div class="form-group">
                         <label asp-for="Product.Complexity"></label>
-                        <select asp-for="Product.Complexity" class="form-control" asp-items="Model.ComplexityList"></select>
+                        <select asp-for="Product.Complexity" class="form-control" asp-items="Model.ComplexityList" ></select>
                         <span asp-validation-for="Product.Complexity" class="text-danger"></span>
                     </div>
 
@@ -164,7 +164,7 @@
 
                     <div class="form-group">
                         <label asp-for="Product.Complexity"></label>
-                        <select asp-for="Product.Complexity" class="form-control" asp-items="Model.ComplexityList" id="EditProductComplexity"></select>
+                        <select asp-for="Product.Complexity"  class="form-control" asp-items="Model.ComplexityList" id="EditProductComplexity"></select>
                         <span asp-validation-for="Product.Complexity" class="text-danger"></span>
                     </div>
 
@@ -222,6 +222,7 @@
 <script>
     // Handle the Edit button click to populate the edit modal
     $('#editModal').on('show.bs.modal', function (event) {
+        debugger;
         var button = $(event.relatedTarget);
         var id = button.data('id');
         var title = button.data('title');
@@ -235,8 +236,24 @@
         modal.find('#EditProductId').val(id);
         modal.find('#EditProductTitle').val(title);
         modal.find('#EditProductDescription').val(description);
-        modal.find('#EditProductComplexity').val(complexity);
-        modal.find('#EditProductStatus').val(status);
+        if(complexity == "S")
+            modal.find('#EditProductComplexity').val(1);
+        else if (complexity == "M")
+            modal.find('#EditProductComplexity').val(2);
+        else if (complexity == "L")
+            modal.find('#EditProductComplexity').val(3);
+        else if (complexity == "XL")
+            modal.find('#EditProductComplexity').val(4);
+
+        if (status == "New")
+            modal.find('#EditProductStatus').val(1);
+        else if (status == "Active")
+            modal.find('#EditProductStatus').val(2);
+        else if (status == "Closed")
+            modal.find('#EditProductStatus').val(3);
+        else if (status == "Abandoned")
+            modal.find('#EditProductStatus').val(4);
+        
         modal.find('#EditTargetCompletionDate').val(targetDate);
         modal.find('#EditActualCompletionDate').val(actualDate);
     });
