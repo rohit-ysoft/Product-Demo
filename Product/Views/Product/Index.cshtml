@@ -112,7 +112,7 @@
 
                     <div class="form-group">
                         <label asp-for="Product.Status"></label>
-                        <select asp-for="Product.Status" class="form-control" asp-items="Model.StatusList"></select>
+                        <select asp-for="Product.Status" class="form-control" asp-items="Model.StatusList" name="Product.Status"></select>
                         <span asp-validation-for="Product.Status" class="text-danger"></span>
                     </div>
 
@@ -170,7 +170,7 @@
 
                     <div class="form-group">
                         <label asp-for="Product.Status"></label>
-                        <select asp-for="Product.Status" class="form-control" asp-items="Model.StatusList" id="EditProductStatus"></select>
+                        <select asp-for="Product.Status" class="form-control" asp-items="Model.StatusList" id="EditProductStatus" name="Product.Status"></select>
                         <span asp-validation-for="Product.Status" class="text-danger"></span>
                     </div>
 
@@ -232,10 +232,12 @@
         var targetDate = button.data('targetdate');
         var actualDate = button.data('actualdate');
 
+
         var modal = $(this);
         modal.find('#EditProductId').val(id);
         modal.find('#EditProductTitle').val(title);
         modal.find('#EditProductDescription').val(description);
+
         if(complexity == "S")
             modal.find('#EditProductComplexity').val(1);
         else if (complexity == "M")
@@ -249,15 +251,80 @@
             modal.find('#EditProductStatus').val(1);
         else if (status == "Active")
             modal.find('#EditProductStatus').val(2);
+      
         else if (status == "Closed")
             modal.find('#EditProductStatus').val(3);
         else if (status == "Abandoned")
             modal.find('#EditProductStatus').val(4);
-        
+
+       
+
         modal.find('#EditTargetCompletionDate').val(targetDate);
         modal.find('#EditActualCompletionDate').val(actualDate);
+        //updateDateInputState();
+
+        var statusSelect1 = document.getElementById('EditProductStatus');
+        var targetCompletionDateInput = document.getElementById('EditTargetCompletionDate');
+        var targetActualDateInput = document.getElementById('EditActualCompletionDate');;
+
+        function updateDateInputState() {
+
+            if (statusSelect1.value === '1' || statusSelect1.value === '3' || statusSelect1.value === '4') {
+                var isActive = true;
+            }
+
+            else { isActive = false }
+
+            if (statusSelect1.value === '1' || statusSelect1.value === '2' || statusSelect1.value === '4') {
+                var Actual = true;
+            }
+
+            else { Actual = false }
+
+            targetCompletionDateInput.disabled = isActive;
+            targetActualDateInput.disabled = Actual;
+        }
+
+        // Initialize the state based on the current selection
+        updateDateInputState();
+
+        // Add event listener to handle changes
+        statusSelect1.addEventListener('change', updateDateInputState);
+
+    });
+   
+    document.addEventListener('DOMContentLoaded', function () {
+        var statusSelect = document.querySelector('select[name="Product.Status"]');
+        var targetCompletionDateInput = document.querySelector('input[name="Product.TargetCompletionDate"]');
+        var targetActualDateInput = document.querySelector('input[name="Product.ActualCompletionDate"]');
+
+        function updateDateInputState() {
+            
+            if (statusSelect.value === '1' || statusSelect.value === '3' || statusSelect.value === '4') {
+                var isActive = true;
+            }
+
+            else { isActive = false }
+
+            if (statusSelect.value === '1' || statusSelect.value === '2' || statusSelect.value === '4') {
+                var Actual = true;
+            }
+
+            else { Actual = false }
+
+            targetCompletionDateInput.disabled = isActive;
+            targetActualDateInput.disabled = Actual;
+        }
+
+        // Initialize the state based on the current selection
+        updateDateInputState();
+
+        // Add event listener to handle changes
+        statusSelect.addEventListener('change', updateDateInputState);
     });
 
+
+  
     // Handle the Delete button click to populate the delete modal
     $('#deleteModal').on('show.bs.modal', function (event) {
         var button = $(event.relatedTarget);
