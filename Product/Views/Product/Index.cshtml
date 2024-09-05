@@ -94,32 +94,55 @@
 </div>
 
 <!-- Edit Modal -->
-<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
+<div class="modal fade" id="createModal" tabindex="-1" role="dialog" aria-labelledby="createModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="editModalLabel">Edit Product</h5>
+                <h5 class="modal-title" id="createModalLabel">Edit Product</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
+                    <span>X</span>
                 </button>
             </div>
-            <form method="post" action="/Products/Edit">
-                <input type="hidden" id="editId" name="Id" />
-                <div class="modal-body">
-                    <div class="form-group">
-                        <label for="editName">Name</label>
-                        <input type="text" class="form-control" id="editName" name="Name" required />
-                    </div>
-                    <div class="form-group">
-                        <label for="editPrice">Price</label>
-                        <input type="number" class="form-control" id="editPrice" name="Price" step="0.01" required />
-                    </div>
+            <form asp-action="Edit" method="post" novalidate>
+                <div class="form-group">
+                    <label asp-for="Product.Title"></label>
+                    <input asp-for="Product.Title" class="form-control" />
+                    <span asp-validation-for="Product.Title" class="text-danger"></span>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary">Save changes</button>
+
+                <div class="form-group">
+                    <label asp-for="Product.Description"></label>
+                    <textarea asp-for="Product.Description" class="form-control"></textarea>
+                    <span asp-validation-for="Product.Description" class="text-danger"></span>
                 </div>
+
+                <div class="form-group">
+                    <label asp-for="Product.Complexity"></label>
+                    <select asp-for="Product.Complexity" class="form-control" asp-items="Model.Product.ComplexityList"></select>
+                    <span asp-validation-for="Product.Complexity" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Product.Status"></label>
+                    <select asp-for="Product.Status" class="form-control" asp-items="Model.Product.StatusList"></select>
+                    <span asp-validation-for="Product.Status" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Product.TargetComplactionDate"></label>
+                    <input type="date" id="TargetCompletionDate" asp-for="Product.TargetComplactionDate" class="form-control" min="@DateTime.Now.ToString("dd-MM-yyyy")" />
+                    <span asp-validation-for="Product.TargetComplactionDate" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Product.ActualComplactionDate"></label>
+                    <input type="date" id="ActualComplactionDate" asp-for="Product.ActualComplactionDate" class="form-control" min="@DateTime.Now.ToString("dd-MM-yyyy")" />
+                    <span asp-validation-for="Product.ActualComplactionDate" class="text-danger"></span>
+                </div>
+
+                <button type="submit" class="btn btn-primary">Submit</button>
             </form>
+
         </div>
     </div>
 </div>
