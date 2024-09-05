@@ -40,4 +40,11 @@ namespace Product.ViewModel
             return value != null && (DateTime)value > DateTime.Now;
         }
     }
+    public class viewModel
+    {
+        public List<productViewModel> Products { get; set; }
+        public productViewModel Product { get; set; }
+    }
+
 }
+

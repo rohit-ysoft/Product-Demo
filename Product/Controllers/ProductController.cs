@@ -6,7 +6,12 @@ using Product.ViewModel;
 namespace Product.Controllers
 {
     public class ProductController : Controller
-    {
+    {  
+        private readonly productDbContext _product;
+        public ProductController(productDbContext product)
+        {
+            _product = product;
+        }
         public IActionResult Create()
         {
             var model = new productViewModel
@@ -72,6 +77,15 @@ namespace Product.Controllers
 
             return View(model);
         }
+
+
+
+        public IActionResult Index()
+        {
+            var Products = _product.Products.ToList();
+            return View(Products); 
+        }
+
     }
 
 }
