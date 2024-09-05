@@ -46,4 +46,11 @@ namespace Product.ViewModel
             return ValidationResult.Success;
         }
     }
+    public class viewModel
+    {
+        public List<productViewModel> Products { get; set; }
+        public productViewModel Product { get; set; }
+    }
+
 }
+
