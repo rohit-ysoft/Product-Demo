@@ -1,41 +1,77 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Product.Models;
+using Product.ViewModel;
 
 namespace Product.Controllers
 {
     public class ProductController : Controller
     {
-        private readonly ProductDbContext _db;
-        public ProductController(ProductDbContext db)
+        public IActionResult Create()
         {
-            _db = db;
-        }
-        public IActionResult Index()
-        {
-            return View();
-        }
-
-        [HttpGet]
-        public IActionResult Create()  
-        {
-            var model = new ProductVM
+            var model = new productViewModel
             {
-                // Create the StatusList from the enum
-                StatusList = _db.status.Select(c => new SelectListItem
-                {
-                    Value = c.SId.ToString(),
-                    Text = c.status
-                }).ToList(),
-                // Create the ComplexityList from the fetched data
-                ComplexityList = _db.complexity.Select(c => new SelectListItem
-                {
-                    Value = c.CId.ToString(),
-                    Text = c.Complexity
-                }).ToList()
+                ComplexityList = Enum.GetValues(typeof(Estimated_Complexity))
+                                    .Cast<Estimated_Complexity>()
+                                    .Select(e => new SelectListItem
+                                    {
+                                        Value = ((int)e).ToString(),
+                                        Text = e.ToString()
+                                    }),
+
+                StatusList = Enum.GetValues(typeof(Status))
+                                 .Cast<Status>()
+                                 .Select(s => new SelectListItem
+                                 {
+                                     Value = ((int)s).ToString(),
+                                     Text = s.ToString()
+                                 })
             };
 
             return View(model);
         }
+
+        [HttpPost]
+        public IActionResult Create(productViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                // Convert the ViewModel to the Entity Model
+                var product = new productModel
+                {
+                    Title = model.Title,
+                    Description = model.Description,
+                    Complexity = model.Complexity,
+                    Status = model.Status,
+                    TargetComplactionDate = model.TargetComplactionDate,
+                    ActualComplactionDate = model.ActualComplactionDate
+                };
+
+                // Save the product entity to the database
+                // ...
+
+                return RedirectToAction("Index");
+            }
+
+            // Re-populate the dropdowns if model state is invalid
+            model.ComplexityList = Enum.GetValues(typeof(Estimated_Complexity))
+                                       .Cast<Estimated_Complexity>()
+                                       .Select(e => new SelectListItem
+                                       {
+                                           Value = ((int)e).ToString(),
+                                           Text = e.ToString()
+                                       });
+
+            model.StatusList = Enum.GetValues(typeof(Status))
+                                   .Cast<Status>()
+                                   .Select(s => new SelectListItem
+                                   {
+                                       Value = ((int)s).ToString(),
+                                       Text = s.ToString()
+                                   });
+
+            return View(model);
+        }
     }
+
 }

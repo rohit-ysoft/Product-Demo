@@ -1,58 +1,41 @@
-﻿@model Product.Models.ProductVM
+﻿@model Product.ViewModel.productViewModel
 
-@{
-    ViewData["Title"] = "Create";
-}
-
-
-
-<h4>Product</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="ID" class="control-label"></label>
-                <input asp-for="ID" class="form-control" />
-                <span asp-validation-for="ID" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Title" class="control-label"></label>
-                <input asp-for="Title" class="form-control" />
-                <span asp-validation-for="Title" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Description" class="control-label"></label>
-                <input asp-for="Description" class="form-control" />
-                <span asp-validation-for="Description" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="status" class="control-label"></label>
-                <input asp-for="status" class="form-control" />
-                <span asp-validation-for="status" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="TargateComplactionDate" class="control-label"></label>
-                <input asp-for="TargateComplactionDate" class="form-control" />
-                <span asp-validation-for="TargateComplactionDate" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ActualComplactionDate" class="control-label"></label>
-                <input asp-for="ActualComplactionDate" class="form-control" />
-                <span asp-validation-for="ActualComplactionDate" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
+<form asp-action="Create" method="post">
+    <div class="form-group">
+        <label asp-for="Title"></label>
+        <input asp-for="Title" class="form-control" />
+        <span asp-validation-for="Title" class="text-danger"></span>
     </div>
-</div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+    <div class="form-group">
+        <label asp-for="Description"></label>
+        <textarea asp-for="Description" class="form-control"></textarea>
+        <span asp-validation-for="Description" class="text-danger"></span>
+    </div>
 
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}
+    <div class="form-group">
+        <label asp-for="Complexity"></label>
+        <select asp-for="Complexity" class="form-control" asp-items="Model.ComplexityList"></select>
+        <span asp-validation-for="Complexity" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Status"></label>
+        <select asp-for="Status" class="form-control" asp-items="Model.StatusList"></select>
+        <span asp-validation-for="Status" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="TargetComplactionDate"></label>
+        <input asp-for="TargetComplactionDate" class="form-control" />
+        <span asp-validation-for="TargetComplactionDate" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="ActualComplactionDate"></label>
+        <input asp-for="ActualComplactionDate" class="form-control" />
+        <span asp-validation-for="ActualComplactionDate" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>
