@@ -24,7 +24,18 @@
         <thead>
             <tr>
                 <th>Id</th>
-                <th>Title</th>
+                <th>
+                    <a href="@Url.Action("Index", new { searchQuery = Model.SearchQuery, page = Model.CurrentPage, sortOrder = Model.SortOrder == "asc" ? "desc" : "asc" })">
+                        Title @if (Model.SortOrder == "asc")
+                        {
+                            <i class="fa fa-sort-asc"></i>
+                        }
+                        else
+                        {
+                            <i class="fa fa-sort-desc"></i>
+                        }
+                    </a>
+                </th>
                 <th>Estimated Complexity</th>
                 <th>Status</th>
                 <th>Target Completion Date</th>

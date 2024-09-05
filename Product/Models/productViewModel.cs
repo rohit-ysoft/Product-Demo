@@ -11,6 +11,7 @@ namespace Product.Models
         public int CurrentPage { get; set; }
         public int TotalPages { get; set; }
         public string SearchQuery { get; set; }
+        public string SortOrder { get; set; }
     }
 
 }

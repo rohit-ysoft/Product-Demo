@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Product.Models;
 
@@ -16,29 +17,30 @@ namespace Product.Controllers
         }
 
         // Index action to display the list of products
-        public async Task<IActionResult> Index(string searchQuery, int page = 1)
-        {
-
+        public async Task<IActionResult> Index(string searchQuery, int page = 1, string sortOrder = "asc")
+        { 
+            
             IQueryable<productModel> query = _context.Products;
-
             if (!string.IsNullOrEmpty(searchQuery))
-            {
-                query = query.Where(p => p.Title.Contains(searchQuery));
-
+            {  query = query.Where(p => p.Title.Contains(searchQuery));
             }
 
-
+            // Apply sorting
+            switch (sortOrder.ToLower())
+            {
+                case "desc":
+                    query = query.OrderByDescending(p => p.Title);
+                    break;
+                case "asc":
+                default:
+                    query = query.OrderBy(p => p.Title);
+                    break;
+            }
             var totalCount = await _context.Products.CountAsync();
-
-
             var products = await query
-           .OrderBy(p => p.ID)
-           .OrderBy(p => p.ID)
-      .Skip((page - 1) * PageSize)
-      .Take(PageSize)
-        .ToListAsync();
-
-
+           .Skip((page - 1) * PageSize)
+           .Take(PageSize)
+          .ToListAsync();
             var model = new productViewModel
             {
                 Products = products,
@@ -46,7 +48,8 @@ namespace Product.Controllers
                 TotalPages = (int)System.Math.Ceiling((double)totalCount / PageSize),
                 SearchQuery = searchQuery,
                 ComplexityList = GetSelectListItems<Complexity>(),
-                StatusList = GetSelectListItems<Status>()
+                StatusList = GetSelectListItems<Status>(),
+                SortOrder = sortOrder
             };
             return View(model);
         }
