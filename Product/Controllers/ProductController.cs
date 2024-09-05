@@ -21,12 +21,13 @@ namespace Product.Controllers
             var viewModel = new productViewModel
             {
                 Products = products,
-                ComplexityList = GetComplexityList(),
-                StatusList = GetStatusList()
+                ComplexityList = GetSelectListItems<Complexity>(),
+                StatusList = GetSelectListItems<Status>()
             };
 
             return View(viewModel);
         }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(productModel product)
@@ -54,15 +55,15 @@ namespace Product.Controllers
             var viewModel = new productViewModel
             {
                 Product = product,
-                ComplexityList = GetComplexityList(),
-                StatusList = GetStatusList()
+                ComplexityList = GetSelectListItems<Complexity>(),
+                StatusList = GetSelectListItems<Status>()
             };
             return View(viewModel);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(productModel product)
+        public async Task<IActionResult> Create(productModel product, Complexity complexity)
         {
 
             if (ModelState.IsValid)
@@ -74,8 +75,8 @@ namespace Product.Controllers
             var viewModel = new productViewModel
             {
                 Product = product,
-                ComplexityList = GetComplexityList(),
-                StatusList = GetStatusList()
+                ComplexityList = GetSelectListItems<Complexity>(),
+                StatusList = GetSelectListItems<Status>()
             };
             return View(viewModel);
         }
@@ -95,27 +96,16 @@ namespace Product.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        // Helper methods to get lists for dropdowns
-        private IEnumerable<SelectListItem> GetComplexityList()
-        {
-            return new List<SelectListItem>
-        {
-            new SelectListItem { Value = "1", Text = "S" },
-            new SelectListItem { Value = "2", Text = "M" },
-            new SelectListItem { Value = "3", Text = "L" },
-            new SelectListItem { Value = "4", Text = "XL" }
-        };
-        }
 
-        private IEnumerable<SelectListItem> GetStatusList()
+        public static List<SelectListItem> GetSelectListItems<T>() where T : Enum
         {
-            return new List<SelectListItem>
-        {
-            new SelectListItem { Value = "1", Text = "New" },
-            new SelectListItem { Value = "2", Text = "Active" },
-            new SelectListItem { Value = "3", Text = "Closed" },
-            new SelectListItem { Value = "4", Text = "Abandoned" }
-        };
+            return Enum.GetValues(typeof(T))
+                       .Cast<T>()
+                       .Select(e => new SelectListItem
+                       {
+                           Value = ((int)(object)e).ToString(),
+                           Text = e.ToString()
+                       }).ToList();
         }
 
         private bool ProductExists(int id)
