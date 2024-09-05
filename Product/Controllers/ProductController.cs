@@ -1,91 +1,125 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using Product.Models;
-using Product.ViewModel;
 
 namespace Product.Controllers
 {
     public class ProductController : Controller
-    {  
-        private readonly productDbContext _product;
-        public ProductController(productDbContext product)
-        {
-            _product = product;
-        }
-        public IActionResult Create()
-        {
-            var model = new productViewModel
-            {
-                ComplexityList = Enum.GetValues(typeof(Estimated_Complexity))
-                                    .Cast<Estimated_Complexity>()
-                                    .Select(e => new SelectListItem
-                                    {
-                                        Value = ((int)e).ToString(),
-                                        Text = e.ToString()
-                                    }),
+    {
+        private readonly productDbContext _context;
 
-                StatusList = Enum.GetValues(typeof(Status))
-                                 .Cast<Status>()
-                                 .Select(s => new SelectListItem
-                                 {
-                                     Value = ((int)s).ToString(),
-                                     Text = s.ToString()
-                                 })
+        public ProductController(productDbContext context)
+        {
+            _context = context;
+        }
+
+        // Index action to display the list of products
+        public async Task<IActionResult> Index()
+        {
+            var products = await _context.Products.ToListAsync();
+            var viewModel = new productViewModel
+            {
+                Products = products,
+                ComplexityList = GetComplexityList(),
+                StatusList = GetStatusList()
             };
 
-            return View(model);
+            return View(viewModel);
         }
-
         [HttpPost]
-        public IActionResult Create(productViewModel model)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(productModel product)
         {
             if (ModelState.IsValid)
             {
-                // Convert the ViewModel to the Entity Model
-                var product = new productModel
+                try
                 {
-                    Title = model.Title,
-                    Description = model.Description,
-                    Complexity = model.Complexity,
-                    Status = model.Status,
-                    TargetComplactionDate = model.TargetComplactionDate,
-                    ActualComplactionDate = model.ActualComplactionDate
-                };
+                    _context.Update(product);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!ProductExists(product.ID))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(Index));
+            }
+            var viewModel = new productViewModel
+            {
+                Product = product,
+                ComplexityList = GetComplexityList(),
+                StatusList = GetStatusList()
+            };
+            return View(viewModel);
+        }
 
-                // Save the product entity to the database
-                // ...
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(productModel product)
+        {
+            if (ModelState.IsValid)
+            {
+                _context.Add(product);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            var viewModel = new productViewModel
+            {
+                Product = product,
+                ComplexityList = GetComplexityList(),
+                StatusList = GetStatusList()
+            };
+            return View(viewModel);
+        }
 
-                return RedirectToAction("Index");
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var product = await _context.Products.FindAsync(id);
+            if (product == null)
+            {
+                return NotFound();
             }
 
-            // Re-populate the dropdowns if model state is invalid
-            model.ComplexityList = Enum.GetValues(typeof(Estimated_Complexity))
-                                       .Cast<Estimated_Complexity>()
-                                       .Select(e => new SelectListItem
-                                       {
-                                           Value = ((int)e).ToString(),
-                                           Text = e.ToString()
-                                       });
-
-            model.StatusList = Enum.GetValues(typeof(Status))
-                                   .Cast<Status>()
-                                   .Select(s => new SelectListItem
-                                   {
-                                       Value = ((int)s).ToString(),
-                                       Text = s.ToString()
-                                   });
-
-            return View(model);
+            _context.Products.Remove(product);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
         }
 
-
-
-        public IActionResult Index()
+        // Helper methods to get lists for dropdowns
+        private IEnumerable<SelectListItem> GetComplexityList()
         {
-            var Products = _product.Products.ToList();
-            return View(Products); 
+            return new List<SelectListItem>
+        {
+            new SelectListItem { Value = "1", Text = "S" },
+            new SelectListItem { Value = "2", Text = "M" },
+            new SelectListItem { Value = "3", Text = "L" },
+            new SelectListItem { Value = "4", Text = "XL" }
+        };
         }
 
-    }
+        private IEnumerable<SelectListItem> GetStatusList()
+        {
+            return new List<SelectListItem>
+        {
+            new SelectListItem { Value = "1", Text = "New" },
+            new SelectListItem { Value = "2", Text = "Active" },
+            new SelectListItem { Value = "3", Text = "Closed" },
+            new SelectListItem { Value = "4", Text = "Abandoned" }
+        };
+        }
 
+        private bool ProductExists(int id)
+        {
+            return _context.Products.Any(e => e.ID == id);
+        }
+    }
 }

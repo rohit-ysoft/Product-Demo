@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using System.ComponentModel.DataAnnotations;
 
 namespace Product.Models
 {
@@ -6,35 +7,29 @@ namespace Product.Models
     {
         [Key]
         public int ID { get; set; }
-
-        [Required, StringLength(1000)]
+        [Required,StringLength(1000)]
         public string Title { get; set; }
-
         [Required, StringLength(5000)]
         public string Description { get; set; }
+        public int Complexity { get; set; }
+        public int Status { get; set; }
+        public IEnumerable<SelectListItem> StatusList { get; set; }
+        [DataType(DataType.Date)]
+        [Display(Name = "Target Completion Date")]
+        [FutureDate(ErrorMessage = "Date should be in the future.")]
+        public DateTime TargetCompletionDate { get; set; }
 
-        public Estimated_Complexity Complexity { get; set; }
-
-        public Status Status { get; set; }
-
-        public DateTime TargetComplactionDate { get; set; }
-
-        public DateTime ActualComplactionDate { get; set; }
+        [DataType(DataType.Date)]
+        [Display(Name = "Actual Completion Date")]
+        [FutureDate(ErrorMessage = "Date should be in the future.")]
+        public DateTime ActualCompletionDate { get; set; }
     }
 
-    public enum Estimated_Complexity
+    public class FutureDateAttribute : ValidationAttribute
     {
-        S = 0,
-        M = 1,
-        L = 2,
-        XL = 3
-    }
-
-    public enum Status
-    {
-        New = 0,
-        Active = 1,
-        Closed = 2,
-        Abandoned = 3
+        public override bool IsValid(object value)
+        {
+            return value != null && (DateTime)value > DateTime.Now;
+        }
     }
 }
